@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>وبلاگ - GapTrade</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans-font@master/dist/IRANSansWeb.woff2" rel="stylesheet">
+    <style>
+        /* === استایل‌های عمومی === */
+        @font-face {
+            font-family: 'IRANSans';
+            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans-font@master/dist/IRANSansWeb.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'IRANSans', sans-serif;
+        }
+
+        body {
+            background-color: #021118;
+            color: white;
+            width: 100%;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* === پترن پس‌زمینه === */
+        .blog-pattern-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #0a121c;
+            background-image: 
+                radial-gradient(rgba(239, 131, 3, 0.05) 2px, transparent 2px),
+                radial-gradient(rgba(255, 255, 255, 0.03) 2px, transparent 2px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        /* گلوها و افکت‌های بصری */
+        .glow-effect {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .glow-top-right {
+            top: -250px;
+            right: -250px;
+            background: radial-gradient(circle, rgba(239, 131, 3, 0.5) 0%, transparent 70%);
+        }
+
+        .glow-bottom-left {
+            bottom: -250px;
+            left: -250px;
+            background: radial-gradient(circle, rgba(0, 100, 255, 0.4) 0%, transparent 70%);
+        }
+
+        /* === بخش اصلی === */
+        .blog-section {
+            padding: 3rem 0 5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .blog-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* هدر صفحه */
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo-container {
+            margin-bottom: 2rem;
+        }
+
+        .logo-img {
+            max-width: 180px;
+            height: auto;
+        }
+
+        .page-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #fff;
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #ef8303, transparent);
+            border-radius: 3px;
+        }
+
+        .page-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+            margin-top: 1.5rem;
+        }
+
+        /* بخش فیلتر و جستجو */
+        .blog-filters {
+            background: rgba(26, 36, 50, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-container {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 2.5rem;
+            border-radius: 8px;
+            background: rgba(16, 23, 34, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(239, 131, 3, 0.4);
+            box-shadow: 0 0 0 2px rgba(239, 131, 3, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .filter-group {
+            min-width: 150px;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            background: rgba(16, 23, 34, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: rgba(239, 131, 3, 0.4);
+            box-shadow: 0 0 0 2px rgba(239, 131, 3, 0.1);
+        }
+
+        .filter-select option {
+            background: #1a2432;
+            color: #fff;
+        }
+
+        .filter-label {
+            display: block;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0.4rem;
+        }
+
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.2rem;
+        }
+
+        .tag-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(239, 131, 3, 0.1);
+            border: 1px solid rgba(239, 131, 3, 0.3);
+            border-radius: 30px;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tag-badge:hover {
+            background: rgba(239, 131, 3, 0.2);
+        }
+
+        .tag-badge.active {
+            background: rgba(239, 131, 3, 0.3);
+            border-color: rgba(239, 131, 3, 0.5);
+            color: #fff;
+        }
+
+        .tag-badge svg {
+            margin-right: 0.5rem;
+        }
+
+        .clear-filters {
+            display: inline-flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            margin-right: auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .clear-filters svg {
+            margin-left: 0.3rem;
+        }
+
+        .clear-filters:hover {
+            color: #ef8303;
+        }
+
+        /* بخش محتوای اصلی */
+        .blog-content {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 2rem;
+        }
+
+        /* لیست بلاگ‌ها */
+        .blog-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .blog-card {
+            background: rgba(26, 36, 50, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            border-color: rgba(239, 131, 3, 0.2);
+        }
+
+        .blog-card-horizontal {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .blog-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .blog-card-horizontal .blog-image {
+            width: 280px;
+            height: auto;
+            flex-shrink: 0;
+        }
+
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .blog-card:hover .blog-image img {
+            transform: scale(1.05);
+        }
+
+        .blog-content-wrap {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .blog-category {
+            font-size: 0.8rem;
+            color: #ef8303;
+            font-weight: 600;
+        }
+
+        .blog-date {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+        }
+
+        .blog-date svg {
+            margin-left: 0.3rem;
+        }
+
+        .blog-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.8rem;
+            line-height: 1.5;
+            transition: color 0.3s ease;
+        }
+
+        .blog-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .blog-card:hover .blog-title {
+            color: #ef8303;
+        }
+
+        .blog-excerpt {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1.2rem;
+            flex-grow: 1;
+        }
+
+        .blog-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .blog-author {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .author-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid rgba(239, 131, 3, 0.3);
+        }
+
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .author-name {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .blog-more {
+            display: inline-flex;
+            align-items: center;
+            color: #ef8303;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .blog-more svg {
+            margin-right: 0.4rem;
+            transition: transform 0.3s ease;
+        }
+
+        .blog-more:hover svg {
+            transform: translateX(-5px);
+        }
+
+        /* پست ویژه بالای صفحه */
+        .featured-post {
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .featured-card {
+            height: 400px;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .featured-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .featured-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .featured-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(10, 18, 28, 0.95) 0%, rgba(10, 18, 28, 0.7) 50%, rgba(10, 18, 28, 0.3) 100%);
+        }
+
+        .featured-content {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            padding: 2.5rem;
+            z-index: 2;
+        }
+
+        .featured-badge {
+            display: inline-block;
+            background: #ef8303;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            margin-bottom: 1rem;
+        }
+
+        .featured-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .featured-title a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .featured-title a:hover {
+            color: #ef8303;
+        }
+
+        .featured-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .featured-meta-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .featured-meta-item svg {
+            margin-left: 0.5rem;
+        }
+
+        /* سایدبار */
+        .blog-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar-widget {
+            background: rgba(26, 36, 50, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .widget-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid rgba(239, 131, 3, 0.3);
+            position: relative;
+        }
+
+        .widget-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 50px;
+            height: 2px;
+            background-color: #ef8303;
+        }
+
+        /* ویجت دسته‌بندی‌ها */
+        .category-list {
+            list-style: none;
+        }
+
+        .category-item {
+            margin-bottom: 0.8rem;
+        }
+
+        .category-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .category-link:hover {
+            color: #ef8303;
+            transform: translateX(-5px);
+        }
+
+        .category-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: rgba(239, 131, 3, 0.1);
+            color: #ef8303;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* ویجت پست‌های محبوب */
+        .popular-posts {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .popular-post {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .popular-image {
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .popular-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .popular-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .popular-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.3rem;
+            line-height: 1.5;
+        }
+
+        .popular-title a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .popular-title a:hover {
+            color: #ef8303;
+        }
+
+        .popular-date {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* ویجت تگ‌ها */
+        .tags-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag-item {
+            display: inline-block;
+            background: rgba(26, 36, 50, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .tag-item:hover {
+            background: rgba(239, 131, 3, 0.1);
+            border-color: rgba(239, 131, 3, 0.3);
+            color: #ef8303;
+        }
+
+        /* پیج‌بندی */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 3rem;
+            gap: 0.5rem;
+        }
+
+        .pagination-item {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(26, 36, 50, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .pagination-item:hover {
+            background: rgba(239, 131, 3, 0.1);
+            border-color: rgba(239, 131, 3, 0.3);
+        }
+
+        .pagination-item.active {
+            background: rgba(239, 131, 3, 0.2);
+            border-color: rgba(239, 131, 3, 0.5);
+            color: #ef8303;
+        }
+
+        .pagination-item.prev,
+        .pagination-item.next {
+            width: auto;
+            padding: 0 1rem;
+        }
+
+        .pagination-item svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .pagination-item.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: default;
+        }
+
+        /* === استایل‌های رسپانسیو === */
+        @media (max-width: 992px) {
+            .blog-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .blog-sidebar {
+                order: 1;
+                margin-bottom: 2rem;
+            }
+            
+            .blog-list {
+                order: 2;
+            }
+            
+            .blog-card-horizontal {
+                flex-direction: column;
+            }
+            
+            .blog-card-horizontal .blog-image {
+                width: 100%;
+                height: 200px;
+            }
+            
+            .featured-card {
+                height: 350px;
+            }
+            
+            .featured-content {
+                padding: 1.5rem;
+            }
+            
+            .featured-title {
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .filter-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-container,
+            .filter-group {
+                width: 100%;
+            }
+            
+            .featured-card {
+                height: 300px;
+            }
+            
+            .featured-content {
+                padding: 1.2rem;
+            }
+            
+            .featured-title {
+                font-size: 1.4rem;
+            }
+            
+            .blog-title {
+                font-size: 1.2rem;
+            }
+            
+            .page-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .logo-img {
+                max-width: 150px;
+            }
+            
+            .page-subtitle {
+                font-size: 0.95rem;
+            }
+            
+            .page-title {
+                font-size: 1.5rem;
+            }
+            
+            .featured-card {
+                height: 260px;
+            }
+            
+            .featured-badge {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.8rem;
+            }
+            
+            .featured-title {
+                font-size: 1.2rem;
+            }
+            
+            .featured-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+            
+            .blog-image {
+                height: 180px;
+            }
+            
+            .blog-content-wrap {
+                padding: 1.2rem;
+            }
+            
+            .blog-title {
+                font-size: 1.1rem;
+            }
+            
+            .blog-footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.8rem;
+            }
+            
+            .pagination-item {
+                width: 35px;
+                height: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- پترن و افکت‌های پس‌زمینه -->
+    <div class="blog-pattern-bg"></div>
+    <div class="glow-effect glow-top-right"></div>
+    <div class="glow-effect glow-bottom-left"></div>
+    
+    <!-- بخش اصلی صفحه -->
+    <section class="blog-section">
+        <div class="blog-container">
+            <!-- هدر صفحه -->
+            <div class="page-header">
+                <div class="logo-container">
+                    <img src="logo3.png" class="logo-img" alt="GapTrade Logo" onerror="this.src='https://via.placeholder.com/180x50/ef8303/ffffff?text=GapTrade'">
+                </div>
+                <h1 class="page-title">وبلاگ گپ‌ترید</h1>
+                <p class="page-subtitle">آخرین اخبار، مقالات و آموزش‌های دنیای ارزهای دیجیتال و فرصت‌های آربیتراژ</p>
+            </div>
+            
+            <!-- پست ویژه -->
+            <div class="featured-post">
+                <div class="featured-card">
+                    <div class="featured-image">
+                        <img src="https://via.placeholder.com/1200x600/1a2432/808080" alt="پست ویژه">
+                    </div>
+                    <div class="featured-content">
+                        <span class="featured-badge">پست ویژه</span>
+                        <h2 class="featured-title">
+                            <a href="#">راهنمای کامل آربیتراژ ارزهای دیجیتال: استراتژی‌های سودآوری در بازار ایران</a>
+                        </h2>
+                        <div class="featured-meta">
+                            <div class="featured-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                ۱۵ اردیبهشت ۱۴۰۴
+                            </div>
+                            <div class="featured-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                علی محمدی
+                            </div>
+                            <div class="featured-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                ۲۴۵۶ بازدید
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- فیلترها -->
+            <div class="blog-filters">
+                <div class="filter-container">
+                    <div class="search-container">
+                        <input type="text" class="search-input" placeholder="جستجو در وبلاگ...">
+                        <span class="search-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </span>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">دسته‌بندی</label>
+                        <select class="filter-select">
+                            <option value="">همه دسته‌بندی‌ها</option>
+                            <option value="arbitrage">آربیتراژ</option>
+                            <option value="crypto">ارزهای دیجیتال</option>
+                            <option value="trading">معامله‌گری</option>
+                            <option value="news">اخبار</option>
+                            <option value="tutorials">آموزش</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">مرتب‌سازی</label>
+                        <select class="filter-select">
+                            <option value="newest">جدیدترین</option>
+                            <option value="popular">محبوب‌ترین</option>
+                            <option value="oldest">قدیمی‌ترین</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="filter-tags">
+                    <span class="tag-badge active">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                        همه
+                    </span>
+                    <span class="tag-badge">آربیتراژ</span>
+                    <span class="tag-badge">بیت‌کوین</span>
+                    <span class="tag-badge">اتریوم</span>
+                    <span class="tag-badge">تحلیل تکنیکال</span>
+                    <span class="tag-badge">صرافی‌ها</span>
+                    
+                    <span class="clear-filters">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                        پاک کردن فیلترها
+                    </span>
+                </div>
+            </div>
+            
+            <!-- محتوای اصلی -->
+            <div class="blog-content">
+                <!-- لیست بلاگ‌ها -->
+                <div class="blog-list">
+                    <!-- پست اول -->
+                    <div class="blog-card blog-card-horizontal">
+                        <div class="blog-image">
+                            <img src="https://via.placeholder.com/600x400/1a2432/808080" alt="مقاله اول">
+                        </div>
+                        <div class="blog-content-wrap">
+                            <div class="blog-meta">
+                                <span class="blog-category">آربیتراژ</span>
+                                <span class="blog-date">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    ۱۲ اردیبهشت ۱۴۰۴
+                                </span>
+                            </div>
+                            <h3 class="blog-title">
+                                <a href="#">بررسی اختلاف قیمت بیت‌کوین در صرافی‌های ایرانی: فرصت‌های پیش رو</a>
+                            </h3>
+                            <p class="blog-excerpt">در این مقاله به بررسی اختلاف قیمت بیت‌کوین در صرافی‌های مختلف ایرانی می‌پردازیم و نکات مهمی برای استفاده از فرصت‌های آربیتراژ ارائه می‌دهیم. با ما همراه باشید تا نکات کلیدی را بررسی کنیم...</p>
+                            <div class="blog-footer">
+                                <div class="blog-author">
+                                    <div class="author-avatar">
+                                        <img src="https://via.placeholder.com/50x50/ef8303/ffffff" alt="نویسنده">
+                                    </div>
+                                    <span class="author-name">رضا امینی</span>
+                                </div>
+                                <a href="#" class="blog-more">
+                                    ادامه مطلب
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- پست دوم -->
+                    <div class="blog-card blog-card-horizontal">
+                        <div class="blog-image">
+                            <img src="https://via.placeholder.com/600x400/1a2432/808080" alt="مقاله دوم">
+                        </div>
+                        <div class="blog-content-wrap">
+                            <div class="blog-meta">
+                                <span class="blog-category">آموزش</span>
+                                <span class="blog-date">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    ۸ اردیبهشت ۱۴۰۴
+                                </span>
+                            </div>
+                            <h3 class="blog-title">
+                                <a href="#">چگونه با استفاده از ابزارهای گپ‌ترید فرصت‌های آربیتراژ را کشف کنیم؟</a>
+                            </h3>
+                            <p class="blog-excerpt">آربیتراژ یکی از روش‌های کم‌ریسک برای کسب سود در بازار ارزهای دیجیتال است. در این مقاله، نحوه استفاده از ابزارهای گپ‌ترید برای شناسایی و استفاده از فرصت‌های آربیتراژ به صورت گام به گام آموزش داده می‌شود...</p>
+                            <div class="blog-footer">
+                                <div class="blog-author">
+                                    <div class="author-avatar">
+                                        <img src="https://via.placeholder.com/50x50/ef8303/ffffff" alt="نویسنده">
+                                    </div>
+                                    <span class="author-name">سارا محمدی</span>
+                                </div>
+                                <a href="#" class="blog-more">
+                                    ادامه مطلب
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- پست سوم -->
+                    <div class="blog-card blog-card-horizontal">
+                        <div class="blog-image">
+                            <img src="https://via.placeholder.com/600x400/1a2432/808080" alt="مقاله سوم">
+                        </div>
+                        <div class="blog-content-wrap">
+                            <div class="blog-meta">
+                                <span class="blog-category">اخبار</span>
+                                <span class="blog-date">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    ۳ اردیبهشت ۱۴۰۴
+                                </span>
+                            </div>
+                            <h3 class="blog-title">
+                                <a href="#">تغییرات جدید در قوانین ارزهای دیجیتال ایران و تأثیر آن بر بازار</a>
+                            </h3>
+                            <p class="blog-excerpt">اخیراً تغییراتی در قوانین مرتبط با ارزهای دیجیتال در ایران اعمال شده است. این تغییرات چه تأثیری بر بازار و فعالیت‌های آربیتراژی خواهند داشت؟ در این مقاله به بررسی جزئیات این تغییرات و چگونگی مدیریت ریسک‌های مرتبط می‌پردازیم...</p>
+                            <div class="blog-footer">
+                                <div class="blog-author">
+                                    <div class="author-avatar">
+                                        <img src="https://via.placeholder.com/50x50/ef8303/ffffff" alt="نویسنده">
+                                    </div>
+                                    <span class="author-name">محمد رضایی</span>
+                                </div>
+                                <a href="#" class="blog-more">
+                                    ادامه مطلب
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- پست چهارم -->
+                    <div class="blog-card blog-card-horizontal">
+                        <div class="blog-image">
+                            <img src="https://via.placeholder.com/600x400/1a2432/808080" alt="مقاله چهارم">
+                        </div>
+                        <div class="blog-content-wrap">
+                            <div class="blog-meta">
+                                <span class="blog-category">تحلیل</span>
+                                <span class="blog-date">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    ۲۸ فروردین ۱۴۰۴
+                                </span>
+                            </div>
+                            <h3 class="blog-title">
+                                <a href="#">مقایسه صرافی‌های ایرانی: بهترین گزینه‌ها برای معامله‌گران آربیتراژ</a>
+                            </h3>
+                            <p class="blog-excerpt">کدام صرافی‌های ایرانی برای انجام معاملات آربیتراژ مناسب‌تر هستند؟ در این مقاله، ویژگی‌های صرافی‌های مختلف را بررسی کرده و بهترین گزینه‌ها را معرفی می‌کنیم. کارمزدها، سرعت واریز و برداشت، و اعتبار صرافی‌ها از جمله فاکتورهای مورد بررسی هستند...</p>
+                            <div class="blog-footer">
+                                <div class="blog-author">
+                                    <div class="author-avatar">
+                                        <img src="https://via.placeholder.com/50x50/ef8303/ffffff" alt="نویسنده">
+                                    </div>
+                                    <span class="author-name">مهدی احمدی</span>
+                                </div>
+                                <a href="#" class="blog-more">
+                                    ادامه مطلب
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- پست پنجم -->
+                    <div class="blog-card blog-card-horizontal">
+                        <div class="blog-image">
+                            <img src="https://via.placeholder.com/600x400/1a2432/808080" alt="مقاله پنجم">
+                        </div>
+                        <div class="blog-content-wrap">
+                            <div class="blog-meta">
+                                <span class="blog-category">معامله‌گری</span>
+                                <span class="blog-date">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    ۲۵ فروردین ۱۴۰۴
+                                </span>
+                            </div>
+                            <h3 class="blog-title">
+                                <a href="#">روش‌های مدیریت ریسک در معاملات آربیتراژ: راهنمای کامل</a>
+                            </h3>
+                            <p class="blog-excerpt">آربیتراژ ممکن است کم‌ریسک به نظر برسد، اما ریسک‌های خاص خود را دارد. در این مقاله، روش‌های مدیریت ریسک در معاملات آربیتراژ را بررسی می‌کنیم و نکات کلیدی برای کاهش ریسک و افزایش سود‌دهی را ارائه می‌دهیم...</p>
+                            <div class="blog-footer">
+                                <div class="blog-author">
+                                    <div class="author-avatar">
+                                        <img src="https://via.placeholder.com/50x50/ef8303/ffffff" alt="نویسنده">
+                                    </div>
+                                    <span class="author-name">فاطمه حسینی</span>
+                                </div>
+                                <a href="#" class="blog-more">
+                                    ادامه مطلب
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- پیج‌بندی -->
+                    <div class="pagination">
+                        <a href="#" class="pagination-item prev disabled">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                            قبلی
+                        </a>
+                        <a href="#" class="pagination-item active">۱</a>
+                        <a href="#" class="pagination-item">۲</a>
+                        <a href="#" class="pagination-item">۳</a>
+                        <span class="pagination-item">...</span>
+                        <a href="#" class="pagination-item">۸</a>
+                        <a href="#" class="pagination-item next">
+                            بعدی
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- سایدبار -->
+                <div class="blog-sidebar">
+                    <!-- ویجت جستجو -->
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">جستجو</h3>
+                        <div class="search-container">
+                            <input type="text" class="search-input" placeholder="جستجو در وبلاگ...">
+                            <span class="search-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- ویجت دسته‌بندی‌ها -->
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">دسته‌بندی‌ها</h3>
+                        <ul class="category-list">
+                            <li class="category-item">
+                                <a href="#" class="category-link">
+                                    آربیتراژ
+                                    <span class="category-count">۱۲</span>
+                                </a>
+                            </li>
+                            <li class="category-item">
+                                <a href="#" class="category-link">
+                                    ارزهای دیجیتال
+                                    <span class="category-count">۲۴</span>
+                                </a>
+                            </li>
+                            <li class="category-item">
+                                <a href="#" class="category-link">
+                                    معامله‌گری
+                                    <span class="category-count">۱۸</span>
+                                </a>
+                            </li>
+                            <li class="category-item">
+                                <a href="#" class="category-link">
+                                    اخبار
+                                    <span class="category-count">۲۰</span>
+                                </a>
+                            </li>
+                            <li class="category-item">
+                                <a href="#" class="category-link">
+                                    آموزش
+                                    <span class="category-count">۱۵</span>
+                                </a>
+                            </li>
+                            <li class="category-item">
+                                <a href="#" class="category-link">
+                                    تحلیل قیمت
+                                    <span class="category-count">۸</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- ویجت پست‌های محبوب -->
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">پرخواننده‌ترین‌ها</h3>
+                        <div class="popular-posts">
+                            <div class="popular-post">
+                                <div class="popular-image">
+                                    <img src="https://via.placeholder.com/150x150/1a2432/808080" alt="محبوب ۱">
+                                </div>
+                                <div class="popular-content">
+                                    <h4 class="popular-title">
+                                        <a href="#">آموزش گام به گام استفاده از گپ‌ترید برای آربیتراژ</a>
+                                    </h4>
+                                    <span class="popular-date">۱۰ اردیبهشت ۱۴۰۴</span>
+                                </div>
+                            </div>
+                            
+                            <div class="popular-post">
+                                <div class="popular-image">
+                                    <img src="https://via.placeholder.com/150x150/1a2432/808080" alt="محبوب ۲">
+                                </div>
+                                <div class="popular-content">
+                                    <h4 class="popular-title">
+                                        <a href="#">مقایسه کارمزد صرافی‌های ارز دیجیتال ایرانی</a>
+                                    </h4>
+                                    <span class="popular-date">۲ اردیبهشت ۱۴۰۴</span>
+                                </div>
+                            </div>
+                            
+                            <div class="popular-post">
+                                <div class="popular-image">
+                                    <img src="https://via.placeholder.com/150x150/1a2432/808080" alt="محبوب ۳">
+                                </div>
+                                <div class="popular-content">
+                                    <h4 class="popular-title">
+                                        <a href="#">۵ استراتژی برتر آربیتراژ برای سال ۱۴۰۴</a>
+                                    </h4>
+                                    <span class="popular-date">۱۵ فروردین ۱۴۰۴</span>
+                                </div>
+                            </div>
+                            
+                            <div class="popular-post">
+                                <div class="popular-image">
+                                    <img src="https://via.placeholder.com/150x150/1a2432/808080" alt="محبوب ۴">
+                                </div>
+                                <div class="popular-content">
+                                    <h4 class="popular-title">
+                                        <a href="#">چگونه با آربیتراژ بین صرافی‌ها سود کنیم؟</a>
+                                    </h4>
+                                    <span class="popular-date">۵ فروردین ۱۴۰۴</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ویجت تگ‌ها -->
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">برچسب‌ها</h3>
+                        <div class="tags-cloud">
+                            <a href="#" class="tag-item">آربیتراژ</a>
+                            <a href="#" class="tag-item">بیت‌کوین</a>
+                            <a href="#" class="tag-item">اتریوم</a>
+                            <a href="#" class="tag-item">تتر</a>
+                            <a href="#" class="tag-item">صرافی</a>
+                            <a href="#" class="tag-item">معامله‌گری</a>
+                            <a href="#" class="tag-item">نوبیتکس</a>
+                            <a href="#" class="tag-item">والکس</a>
+                            <a href="#" class="tag-item">تحلیل تکنیکال</a>
+                            <a href="#" class="tag-item">ریسک</a>
+                            <a href="#" class="tag-item">سودآوری</a>
+                            <a href="#" class="tag-item">کارمزد</a>
+                            <a href="#" class="tag-item">گپ‌ترید</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        // اسکریپت‌های مربوط به فیلترها
+        document.addEventListener('DOMContentLoaded', function() {
+            // تگ‌های فیلتر
+            const tagBadges = document.querySelectorAll('.tag-badge');
+            tagBadges.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    // اگر روی همه کلیک شده، همه را غیرفعال کن
+                    if (this.textContent.trim() === 'همه') {
+                        tagBadges.forEach(t => {
+                            if (t !== this) {
+                                t.classList.remove('active');
+                            } else {
+                                t.classList.add('active');
+                            }
+                        });
+                        return;
+                    }
+                    
+                    // اگر روی تگ دیگری کلیک شده، تگ "همه" را غیرفعال کن
+                    tagBadges.forEach(t => {
+                        if (t.textContent.trim() === 'همه') {
+                            t.classList.remove('active');
+                        }
+                    });
+                    
+                    // تغییر وضعیت تگ کلیک شده
+                    this.classList.toggle('active');
+                });
+            });
+            
+            // پاک کردن فیلترها
+            const clearFilters = document.querySelector('.clear-filters');
+            clearFilters.addEventListener('click', function() {
+                // همه تگ‌ها را غیرفعال کن
+                tagBadges.forEach(tag => {
+                    tag.classList.remove('active');
+                });
+                
+                // تگ "همه" را فعال کن
+                tagBadges.forEach(tag => {
+                    if (tag.textContent.trim() === 'همه') {
+                        tag.classList.add('active');
+                    }
+                });
+                
+                // دراپ‌داون‌ها را ریست کن
+                document.querySelectorAll('.filter-select').forEach(select => {
+                    select.selectedIndex = 0;
+                });
+                
+                // فیلد جستجو را پاک کن
+                document.querySelectorAll('.search-input').forEach(input => {
+                    input.value = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

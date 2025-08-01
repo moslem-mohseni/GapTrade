@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قوانین و مقررات - GapTrade</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans-font@master/dist/IRANSansWeb.woff2" rel="stylesheet">
+    <style>
+        /* === استایل‌های عمومی === */
+        @font-face {
+            font-family: 'IRANSans';
+            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans-font@master/dist/IRANSansWeb.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'IRANSans', sans-serif;
+        }
+
+        body {
+            background-color: #021118;
+            color: white;
+            width: 100%;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* === پترن پس‌زمینه === */
+        .terms-pattern-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #0a121c;
+            background-image: 
+                radial-gradient(rgba(239, 131, 3, 0.05) 2px, transparent 2px),
+                radial-gradient(rgba(255, 255, 255, 0.03) 2px, transparent 2px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        /* گلوها و افکت‌های بصری */
+        .glow-effect {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .glow-top-right {
+            top: -250px;
+            right: -250px;
+            background: radial-gradient(circle, rgba(239, 131, 3, 0.5) 0%, transparent 70%);
+        }
+
+        .glow-bottom-left {
+            bottom: -250px;
+            left: -250px;
+            background: radial-gradient(circle, rgba(0, 100, 255, 0.4) 0%, transparent 70%);
+        }
+
+        /* === بخش اصلی === */
+        .terms-section {
+            padding: 3rem 0 5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .terms-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* هدر صفحه */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo-container {
+            margin-bottom: 2rem;
+        }
+
+        .logo-img {
+            max-width: 180px;
+            height: auto;
+        }
+
+        .page-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #fff;
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #ef8303, transparent);
+            border-radius: 3px;
+        }
+
+        .page-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+            margin-top: 1.5rem;
+        }
+
+        /* باکس اصلی محتوا */
+        .terms-card {
+            background: rgba(26, 36, 50, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .terms-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at right top, rgba(239, 131, 3, 0.2) 0%, transparent 70%);
+            opacity: 0.4;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+        }
+        
+        /* استایل آکوردئون */
+        .accordion-container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .accordion-item {
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background: rgba(20, 30, 43, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .accordion-item:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .accordion-header {
+            padding: 1.2rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.2rem;
+            position: relative;
+            background: linear-gradient(to left, rgba(239, 131, 3, 0.1), transparent);
+            border-right: 3px solid #ef8303;
+            transition: all 0.3s ease;
+        }
+        
+        .accordion-header:hover {
+            background: linear-gradient(to left, rgba(239, 131, 3, 0.2), transparent);
+        }
+        
+        .accordion-header::before {
+            counter-increment: accordion-counter;
+            content: counter(accordion-counter);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: rgba(239, 131, 3, 0.2);
+            color: #ef8303;
+            border-radius: 50%;
+            margin-left: 1rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        
+        .accordion-icon {
+            transform: rotate(0deg);
+            transition: transform 0.3s ease;
+        }
+        
+        .accordion-header.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            padding: 0 1.5rem;
+            background: rgba(20, 30, 43, 0.4);
+        }
+        
+        .accordion-body {
+            padding: 0 0 1.5rem 0;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            line-height: 1.9;
+        }
+        
+        .accordion-body p {
+            margin-bottom: 1rem;
+        }
+        
+        .accordion-body ul, 
+        .accordion-body ol {
+            padding-right: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .accordion-body li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .accordion-body strong {
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 600;
+        }
+        
+        .highlight-box {
+            background: rgba(239, 131, 3, 0.1);
+            border: 1px solid rgba(239, 131, 3, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .highlight-title {
+            color: #ef8303;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .highlight-title svg {
+            margin-left: 0.5rem;
+        }
+
+        /* === استایل‌های رسپانسیو === */
+        @media (max-width: 768px) {
+            .terms-card {
+                padding: 2rem;
+            }
+            
+            .page-title {
+                font-size: 1.8rem;
+            }
+            
+            .accordion-header {
+                font-size: 1.1rem;
+                padding: 1rem 1.2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .terms-card {
+                padding: 1.5rem;
+            }
+            
+            .page-title {
+                font-size: 1.5rem;
+            }
+            
+            .page-subtitle {
+                font-size: 0.95rem;
+            }
+            
+            .accordion-header {
+                font-size: 1rem;
+                padding: 0.9rem 1rem;
+            }
+            
+            .accordion-header::before {
+                width: 24px;
+                height: 24px;
+                font-size: 0.8rem;
+                margin-left: 0.7rem;
+            }
+            
+            .accordion-body {
+                font-size: 0.95rem;
+            }
+            
+            .highlight-box {
+                padding: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- پترن و افکت‌های پس‌زمینه -->
+    <div class="terms-pattern-bg"></div>
+    <div class="glow-effect glow-top-right"></div>
+    <div class="glow-effect glow-bottom-left"></div>
+    
+    <!-- بخش اصلی صفحه -->
+    <section class="terms-section">
+        <div class="terms-container">
+            <!-- هدر صفحه -->
+            <div class="page-header">
+                <div class="logo-container">
+                    <img src="logo3.png" class="logo-img" alt="GapTrade Logo" onerror="this.src='https://via.placeholder.com/180x50/ef8303/ffffff?text=GapTrade'">
+                </div>
+                <h1 class="page-title">قوانین و مقررات استفاده از خدمات گپ‌ترید</h1>
+                <p class="page-subtitle">برای استفاده از خدمات گپ‌ترید، لطفاً قوانین و مقررات زیر را با دقت مطالعه فرمایید. استفاده از خدمات گپ‌ترید به منزله پذیرش تمام شرایط و ضوابط زیر است.</p>
+            </div>
+            
+            <!-- محتوای اصلی -->
+            <div class="terms-card">
+                <!-- محتوای آکوردئون -->
+                <div class="accordion-container" style="counter-reset: accordion-counter;">
+                    <!-- بخش 1 -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            مقدمه و تعاریف
+                            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <p>سامانه گپ‌ترید (GapTrade) یک سیستم هوشمند کشف آربیتراژ در بازار ارزهای دیجیتال ایران است که به کاربران امکان می‌دهد اختلاف قیمت ارزها بین صرافی‌های مختلف را شناسایی کرده و از فرصت‌های سودآوری استفاده کنند.</p>
+                                
+                                <p>در این قوانین، اصطلاحات زیر دارای معانی مشخص شده هستند:</p>
+                                
+                                <ul>
+                                    <li><strong>گپ‌ترید (GapTrade):</strong> به وب‌سایت، نرم‌افزار، اپلیکیشن موبایل و سایر خدمات ارائه شده توسط شرکت گپ‌ترید اشاره دارد.</li>
+                                    <li><strong>کاربر:</strong> هر شخص حقیقی یا حقوقی که از خدمات گپ‌ترید استفاده می‌کند.</li>
+                                    <li><strong>آربیتراژ:</strong> استراتژی معاملاتی که از تفاوت قیمت یک دارایی در دو یا چند بازار مختلف سود می‌برد.</li>
+                                    <li><strong>داده‌های بازار:</strong> اطلاعات قیمت، حجم معاملات و سایر اطلاعات مربوط به ارزهای دیجیتال در صرافی‌های مختلف.</li>
+                                    <li><strong>محتوا:</strong> هر نوع داده، متن، گرافیک، تصویر، نرم‌افزار یا اطلاعات دیگری که روی پلتفرم گپ‌ترید ارائه می‌شود.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- بخش 2 -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            ثبت‌نام و حساب کاربری
+                            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <p>برای استفاده از خدمات کامل گپ‌ترید، باید در سایت ثبت‌نام کرده و حساب کاربری ایجاد نمایید. با ثبت‌نام در گپ‌ترید، شما تأیید می‌کنید که:</p>
+                                
+                                <ul>
+                                    <li>حداقل ۱۸ سال سن دارید یا به سن قانونی در کشور خود رسیده‌اید.</li>
+                                    <li>اطلاعات دقیق، کامل و به‌روز در هنگام ثبت‌نام و استفاده از خدمات ارائه می‌دهید.</li>
+                                    <li>مسئولیت حفظ امنیت و محرمانگی اطلاعات حساب کاربری خود از جمله رمز عبور را می‌پذیرید.</li>
+                                    <li>مسئولیت تمام فعالیت‌هایی که تحت حساب کاربری شما انجام می‌شود را می‌پذیرید.</li>
+                                </ul>
+                                
+                                <p>گپ‌ترید حق دارد در صورت تشخیص نقض قوانین، حساب کاربری شما را بدون اطلاع قبلی تعلیق یا مسدود کند.</p>
+                                
+                                <div class="highlight-box">
+                                    <div class="highlight-title">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                        </svg>
+                                        توجه مهم
+                                    </div>
+                                    <p>هر کاربر مجاز به داشتن تنها یک حساب کاربری است. ایجاد چندین حساب کاربری به هر دلیل ممنوع است و ممکن است منجر به مسدود شدن تمامی حساب‌های مرتبط شود.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- بخش 3 -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            خدمات و نحوه استفاده
+                            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <p>گپ‌ترید خدمات زیر را ارائه می‌دهد:</p>
+                                
+                                <ul>
+                                    <li>نمایش اختلاف قیمت ارزهای دیجیتال بین صرافی‌های مختلف</li>
+                                    <li>هشدارهای لحظه‌ای فرصت‌های آربیتراژ</li>
+                                    <li>تحلیل داده‌های بازار و ارائه پیشنهادهای معاملاتی</li>
+                                    <li>ابزارهای پیشرفته برای تحلیل و استراتژی معاملات</li>
+                                </ul>
+                                
+                                <p>گپ‌ترید به صورت رایگان و پریمیوم ارائه می‌شود. برخی از خدمات پیشرفته فقط برای کاربران با اشتراک پریمیوم قابل دسترسی است.</p>
+                                
+                                <p><strong>توجه: </strong>گپ‌ترید صرفاً یک ابزار اطلاعاتی است و خدمات معاملاتی مستقیم ارائه نمی‌دهد. برای انجام معاملات، کاربران باید در صرافی‌های مربوطه حساب کاربری داشته باشند.</p>
+                                
+                                <p>گپ‌ترید تلاش می‌کند اطلاعات دقیق و به‌روز ارائه دهد، اما به دلیل ماهیت پویای بازارهای ارز دیجیتال، ممکن است تأخیرهایی در به‌روزرسانی داده‌ها وجود داشته باشد.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- بخش 4 -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            مسئولیت‌های کاربر
+                            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <p>با استفاده از گپ‌ترید، شما موافقت می‌کنید که:</p>
+                                
+                                <ul>
+                                    <li>از خدمات گپ‌ترید فقط برای اهداف قانونی و مطابق با این قوانین استفاده کنید.</li>
+                                    <li>هیچ‌گونه محتوای غیرقانونی، توهین‌آمیز، تهدیدکننده یا مخرب در پلتفرم ارسال نکنید.</li>
+                                    <li>در فعالیت‌هایی که می‌تواند به پلتفرم یا کاربران دیگر آسیب برساند، شرکت نکنید.</li>
+                                    <li>به حقوق مالکیت معنوی گپ‌ترید و دیگران احترام بگذارید.</li>
+                                    <li>به سیستم‌ها یا شبکه‌های متصل به گپ‌ترید هک یا دسترسی غیرمجاز نداشته باشید.</li>
+                                </ul>
+                                
+                                <p>همچنین، شما مسئولیت کامل هرگونه تصمیم‌گیری مالی و معاملاتی بر اساس اطلاعات ارائه شده توسط گپ‌ترید را بر عهده دارید.</p>
+                                
+                                <div class="highlight-box">
+                                    <div class="highlight-title">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                        </svg>
+                                        هشدار ریسک
+                                    </div>
+                                    <p>سرمایه‌گذاری در ارزهای دیجیتال با ریسک بالا همراه است. همیشه فقط مبلغی را سرمایه‌گذاری کنید که توانایی از دست دادن آن را داشته باشید.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- بخش 5 -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            محدودیت مسئولیت
+                            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <p>گپ‌ترید و مدیران، کارمندان و نمایندگان آن، تحت هیچ شرایطی مسئول هیچ گونه خسارت مستقیم، غیرمستقیم، تصادفی، خاص یا تبعی ناشی از:</p>
+                                
+                                <ul>
+                                    <li>استفاده یا عدم توانایی استفاده از خدمات گپ‌ترید</li>
+                                    <li>هرگونه تصمیم یا اقدام انجام شده بر اساس اطلاعات ارائه شده توسط گپ‌ترید</li>
+                                    <li>خسارات مالی، از دست دادن سود، داده یا فرصت‌های تجاری</li>
+                                    <li>اختلال یا قطعی در خدمات</li>
+                                    <li>دقت، کامل بودن یا به‌روز بودن اطلاعات ارائه شده</li>
+                                </ul>
+                                
+                                <p>خدمات گپ‌ترید «همانطور که هست» و «به صورت در دسترس» ارائه می‌شود، بدون هیچ گونه ضمانت صریح یا ضمنی.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- بخش 6 -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            مالکیت معنوی
+                            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <p>تمام حقوق مالکیت معنوی مربوط به گپ‌ترید، از جمله اما نه محدود به لوگو، نام تجاری، کدها، نرم‌افزار، طراحی‌ها، متن‌ها و محتوا متعلق به گپ‌ترید است.</p>
+                                
+                                <p>بدون اجازه کتبی از گپ‌ترید، شما مجاز به:</p>
+                                
+                                <ul>
+                                    <li>کپی، تغییر، توزیع یا انتشار محتوای گپ‌ترید نیستید</li>
+                                    <li>استفاده از نام، لوگو یا علائم تجاری گپ‌ترید برای اهداف تجاری نیستید</li>
+                                    <li>مهندسی معکوس، تجزیه یا تغییر در کد منبع یا نرم‌افزار گپ‌ترید نیستید</li>
+                                </ul>
+                                
+                                <p>گپ‌ترید به شما یک مجوز محدود، غیرانحصاری و غیرقابل انتقال برای استفاده شخصی و غیرتجاری از خدمات را اعطا می‌کند.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- بخش 7 -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            حریم خصوصی و داده‌ها
+                            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <p>گپ‌ترید به حریم خصوصی کاربران احترام می‌گذارد و متعهد به حفاظت از داده‌های شخصی شماست. نحوه جمع‌آوری، استفاده و محافظت از اطلاعات شما در <a href="#" style="color: #ef8303; text-decoration: none;">سیاست حریم خصوصی</a> ما شرح داده شده است.</p>
+                                
+                                <p>با استفاده از گپ‌ترید، شما موافقت می‌کنید که:</p>
+                                
+                                <ul>
+                                    <li>گپ‌ترید می‌تواند داده‌های شما را برای ارائه خدمات، بهبود پلتفرم و ارتباط با شما جمع‌آوری و پردازش کند.</li>
+                                    <li>گپ‌ترید می‌تواند از کوکی‌ها و فناوری‌های مشابه برای بهبود تجربه کاربری استفاده کند.</li>
+                                    <li>گپ‌ترید ممکن است در موارد لازم، داده‌های شما را با شرکای تجاری و ارائه‌دهندگان خدمات به اشتراک بگذارد.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- بخش 8 -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            تغییرات در قوانین
+                            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <p>گپ‌ترید حق دارد این قوانین و مقررات را در هر زمان و بدون اطلاع قبلی تغییر دهد. تغییرات از زمان انتشار روی وب‌سایت اعمال می‌شوند.</p>
+                                
+                                <p>استفاده مداوم از خدمات گپ‌ترید پس از اعمال تغییرات به معنای پذیرش شرایط جدید است. توصیه می‌کنیم به طور منظم این صفحه را بررسی کنید تا از آخرین تغییرات مطلع شوید.</p>
+                                
+                                <p>در صورت عدم موافقت با تغییرات، باید استفاده از خدمات گپ‌ترید را متوقف کنید.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- بخش 9 -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            قوانین حاکم
+                            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <p>این قوانین و مقررات تحت قوانین جمهوری اسلامی ایران تفسیر و اجرا می‌شوند. هرگونه اختلاف ناشی از این قوانین ابتدا از طریق مذاکره دوستانه حل و فصل خواهد شد.</p>
+                                
+                                <p>در صورت عدم حل و فصل اختلاف از طریق مذاکره، دادگاه‌های صالحه در ایران صلاحیت انحصاری برای رسیدگی به اختلافات را دارند.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- کارت تأییدیه -->
+            <div class="terms-agree-card">
+                <h3 class="agree-title">با قوانین و مقررات موافقت می‌کنید؟</h3>
+                <p class="agree-text">استفاده از خدمات گپ‌ترید به معنای موافقت با تمام موارد ذکر شده در قوانین و مقررات است. لطفاً قبل از ادامه، تمام موارد را با دقت مطالعه کنید.</p>
+                <button class="agree-btn" onclick="window.history.back()">موافقم و متوجه شدم</button>
+                <a href="#" class="back-btn" onclick="window.history.back()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    بازگشت
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        // اسکریپت برای عملکرد آکوردئون
+        document.addEventListener('DOMContentLoaded', function() {
+            // تنظیم اولیه آکوردئون‌ها
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            const accordionContents = document.querySelectorAll('.accordion-content');
+            
+            // باز کردن اولین آیتم به صورت پیش‌فرض
+            if(accordionHeaders.length > 0) {
+                accordionHeaders[0].classList.add('active');
+                const firstContent = accordionHeaders[0].nextElementSibling;
+                firstContent.style.maxHeight = firstContent.scrollHeight + 'px';
+            }
+            
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    // وضعیت فعال/غیرفعال
+                    this.classList.toggle('active');
+                    
+                    // محتوای مرتبط
+                    const content = this.nextElementSibling;
+                    
+                    // باز/بسته کردن محتوا
+                    if (this.classList.contains('active')) {
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                    } else {
+                        content.style.maxHeight = 0;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
