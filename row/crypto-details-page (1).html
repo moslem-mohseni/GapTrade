@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بیت‌کوین (BTC) - GapTrade</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans-font@master/dist/IRANSansWeb.woff2" rel="stylesheet">
+    <style>
+        /* === استایل‌های عمومی === */
+        @font-face {
+            font-family: 'IRANSans';
+            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans-font@master/dist/IRANSansWeb.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'IRANSans', sans-serif;
+        }
+
+        body {
+            background-color: #021118;
+            color: white;
+            width: 100%;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* === پترن پس‌زمینه === */
+        .crypto-pattern-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #0a121c;
+            background-image: 
+                radial-gradient(rgba(239, 131, 3, 0.05) 2px, transparent 2px),
+                radial-gradient(rgba(255, 255, 255, 0.03) 2px, transparent 2px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        /* گلوها و افکت‌های بصری */
+        .glow-effect {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .glow-top-right {
+            top: -250px;
+            right: -250px;
+            background: radial-gradient(circle, rgba(239, 131, 3, 0.5) 0%, transparent 70%);
+        }
+
+        .glow-bottom-left {
+            bottom: -250px;
+            left: -250px;
+            background: radial-gradient(circle, rgba(0, 100, 255, 0.4) 0%, transparent 70%);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        /* === بخش هدر ارز === */
+        .coin-header {
+            background: rgba(26, 36, 50, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .coin-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at right top, rgba(239, 131, 3, 0.2) 0%, transparent 70%);
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        .coin-header-content {
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .coin-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 1.5rem;
+            overflow: hidden;
+        }
+
+        .coin-icon img {
+            width: 85%;
+            height: 85%;
+            object-fit: contain;
+        }
+
+        .coin-info {
+            flex-grow: 1;
+        }
+
+        .coin-name {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .coin-symbol {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+
+        .coin-price {
+            display: flex;
+            align-items: center;
+        }
+
+        .price-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-left: 0.8rem;
+        }
+
+        .price-change {
+            display: flex;
+            align-items: center;
+            padding: 0.4rem 0.8rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .price-change.up {
+            background-color: rgba(11, 232, 129, 0.1);
+            color: #0be881;
+        }
+
+        .price-change.down {
+            background-color: rgba(255, 71, 87, 0.1);
+            color: #ff4757;
+        }
+
+        .price-change svg {
+            margin-left: 0.5rem;
+        }
+
+        .coin-stats {
+            display: flex;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .stat-item {
+            background: rgba(16, 23, 34, 0.6);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            min-width: 180px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .coin-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-right: 2rem;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #ef8303, #ff9419);
+            border: none;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(239, 131, 3, 0.2);
+        }
+
+        .action-btn svg {
+            margin-left: 0.5rem;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(239, 131, 3, 0.3);
+        }
+
+        .favorite-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.8rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .favorite-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* === بخش مقایسه قیمت === */
+        .price-comparison {
+            background: rgba(26, 36, 50, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 0;
+            width: 70px;
+            height: 3px;
+            background-color: #ef8303;
+            border-radius: 3px;
+        }
+
+        .price-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 2rem;
+        }
+
+        .price-table th {
+            text-align: right;
+            padding: 1rem;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .price-table td {
+            padding: 1.2rem 1rem;
+            font-size: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .price-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .price-table tr:hover {
+            background-color: rgba(239, 131, 3, 0.05);
+        }
+
+        .price-table tr.best-buy {
+            background: radial-gradient(ellipse at right top, rgba(239, 131, 3, 0.15) 0%, rgba(26, 36, 50, 0.6) 70%);
+        }
+
+        .exchange-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .exchange-logo {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+        }
+
+        .exchange-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .exchange-name {
+            font-weight: 600;
+        }
+
+        .price-cell {
+            position: relative;
+        }
+
+        .price-cell.best {
+            color: #0be881;
+            font-weight: 700;
+        }
+
+        .price-tag {
+            position: absolute;
+            top: -8px;
+            left: 0;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background-color: rgba(11, 232, 129, 0.15);
+            color: #0be881;
+            font-weight: 700;
+        }
+
+        .diff-cell {
+            text-align: center;
+        }
+
+        .diff-value {
+            display: inline-block;
+            font-weight: 700;
+            color: #0be881;
+        }
+
+        .volume-bar {
+            height: 6px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .volume-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ef8303, #ff9419);
+            border-radius: 3px;
+        }
+
+        .volume-bar span {
+            position: absolute;
+            right: 0;
+            top: 9px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .action-btn.sm {
+            padding: 0.5rem 1.2rem;
+            font-size: 0.9rem;
+        }
+
+        .update-time {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1.5rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        .time-icon {
+            margin-left: 0.5rem;
+        }
+
+        /* === بخش فرصت‌های آربیتراژ === */
+        .arbitrage-section {
+            background: rgba(26, 36, 50, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .arbitrage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .arbitrage-card {
+            background-color: #1a2432;
+            background-image: radial-gradient(ellipse at right top, rgba(239, 131, 3, 0.93) 0%, #1a2432 47%, #1a2432 100%);
+            border-radius: 18px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .arbitrage-card::before {
+            position: absolute;
+            content: "";
+            top: 0;
+            right: 0;
+            width: 5px;
+            height: 100%;
+            background-color: #ef8303;
+            border-radius: 18px 0 0 18px;
+        }
+
+        .arbitrage-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-date {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .card-menu {
+            width: 24px;
+            height: 24px;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .risk-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .risk-value {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .progress-container {
+            margin-bottom: 1.8rem;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill.low {
+            background: linear-gradient(90deg, #0be881, #2ecc71);
+        }
+
+        .progress-fill.medium {
+            background: linear-gradient(90deg, #0fbcf9, #4a69bd);
+        }
+
+        .progress-fill.high {
+            background: linear-gradient(90deg, #ef8303, #ff9f1a);
+        }
+
+        .progress-fill.very-high {
+            background: linear-gradient(90deg, #eb3b5a, #f53b57);
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .detail-value {
+            font-weight: 500;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .detail-value.highlight {
+            color: #0be881;
+            font-weight: 700;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background-color: rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        .discovery-time {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        /* === بخش اطلاعات ارز === */
+        .coin-details {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .details-card {
+            background: rgba(26, 36, 50, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .coin-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+            margin-top: 1.5rem;
+        }
+
+        .coin-description p {
+            margin-bottom: 1rem;
+        }
+
+        .coin-description a {
+            color: #ef8303;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .coin-description a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 1px;
+            background-color: #ef8303;
+            transition: width 0.3s ease;
+        }
+
+        .coin-description a:hover::after {
+            width: 100%;
+        }
+
+        .key-features {
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(239, 131, 3, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 1rem;
+            color: #ef8303;
+            flex-shrink: 0;
+        }
+
+        .feature-content {
+            flex-grow: 1;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-desc {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .technical-info {
+            margin-top: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .info-value {
+            font-weight: 600;
+        }
+
+        .price-chart {
+            position: relative;
+            height: 300px;
+            margin: 2rem 0;
+            background: rgba(16, 23, 34, 0.6);
+            border-radius: 15px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .chart-placeholder {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .time-filters {
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .time-filter {
+            padding: 0.5rem 1rem;
+            margin: 0 0.3rem;
+            background: rgba(16, 23, 34, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .time-filter:hover,
+        .time-filter.active {
+            background: rgba(239, 131, 3, 0.2);
+            border-color: rgba(239, 131, 3, 0.5);
+            color: #ef8303;
+        }
+
+        /* === استایل‌های رسپانسیو === */
+        @media (max-width: 1200px) {
+            .coin-details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .coin-header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .coin-icon {
+                margin: 0 0 1.5rem 0;
+            }
+            
+            .coin-actions {
+                margin: 1.5rem 0 0 0;
+                flex-direction: row;
+                justify-content: center;
+            }
+            
+            .action-btn {
+                margin: 0 0.5rem;
+            }
+            
+            .favorite-btn {
+                margin: 0 0.5rem;
+            }
+            
+            .coin-stats {
+                justify-content: center;
+            }
+            
+            .arbitrage-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 1rem 10px;
+            }
+            
+            .coin-header, .price-comparison, .arbitrage-section, .details-card {
+                padding: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+            }
+            
+            .coin-name {
+                font-size: 1.6rem;
+            }
+            
+            .price-value {
+                font-size: 1.4rem;
+            }
+            
+            .stat-item {
+                min-width: 100%;
+            }
+            
+            .coin-actions {
+                flex-direction: column;
+            }
+            
+            .action-btn, .favorite-btn {
+                margin: 0.5rem 0;
+            }
+            
+            .price-table th, .price-table td {
+                padding: 0.8rem 0.5rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- پترن و افکت‌های پس‌زمینه -->
+    <div class="crypto-pattern-bg"></div>
+    <div class="glow-effect glow-top-right"></div>
+    <div class="glow-effect glow-bottom-left"></div>
+    
+    <div class="container">
+        <!-- بخش هدر ارز -->
+        <section class="coin-header">
+            <div class="coin-header-content">
+                <div class="coin-icon">
+                    <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt="Bitcoin">
+                </div>
+                
+                <div class="coin-info">
+                    <h1 class="coin-name">بیت‌کوین</h1>
+                    <div class="coin-symbol">Bitcoin (BTC)</div>
+                    
+                    <div class="coin-price">
+                        <div class="price-value">۱,۸۵۹,۴۰۰,۰۰۰ تومان</div>
+                        <div class="price-change up">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="18 15 12 9 6 15"></polyline>
+                            </svg>
+                            ۳.۸٪
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="coin-actions">
+                    <button class="action-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <polyline points="9 21 3 21 3 15"></polyline>
+                            <line x1="21" y1="3" x2="14" y2="10"></line>
+                            <line x1="3" y1="21" x2="10" y2="14"></line>
+                        </svg>
+                        فرصت‌های آربیتراژ
+                    </button>
+                    <button class="favorite-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="coin-stats">
+                <div class="stat-item">
+                    <div class="stat-label">حجم معاملات (۲۴ ساعته)</div>
+                    <div class="stat-value">۸۲,۳۷۵,۴۵۱,۰۰۰ تومان</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">ارزش بازار</div>
+                    <div class="stat-value">۳۶,۱۲۲,۸۰۵,۰۰۰,۰۰۰ تومان</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">رده‌بندی در بازار</div>
+                    <div class="stat-value">#۱</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">عرضه در گردش</div>
+                    <div class="stat-value">۱۹,۴۲۵,۷۰۶ BTC</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- بخش مقایسه قیمت -->
+        <section class="price-comparison">
+            <h2 class="section-title">مقایسه قیمت بیت‌کوین در صرافی‌های مختلف</h2>
+            
+            <table class="price-table">
+                <thead>
+                    <tr>
+                        <th>صرافی</th>
+                        <th>قیمت خرید (تومان)</th>
+                        <th>قیمت فروش (تومان)</th>
+                        <th>اختلاف قیمت</th>
+                        <th>حجم معاملات (24h)</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="best-buy">
+                        <td>
+                            <div class="exchange-info">
+                                <div class="exchange-logo">
+                                    <img src="https://via.placeholder.com/30" alt="نوبیتکس">
+                                </div>
+                                <div class="exchange-name">نوبیتکس</div>
+                            </div>
+                        </td>
+                        <td class="price-cell best">
+                            <span class="price-value">1,859,120,000</span>
+                            <span class="price-tag best-tag">بهترین خرید</span>
+                        </td>
+                        <td class="price-cell">1,860,390,000</td>
+                        <td class="diff-cell">
+                            <span class="diff-value">2.1%</span>
+                        </td>
+                        <td>
+                            <div class="volume-bar">
+                                <div class="volume-fill" style="width: 85%;"></div>
+                                <span>1.2 میلیارد</span>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="action-btn sm">خرید</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="exchange-info">
+                                <div class="exchange-logo">
+                                    <img src="https://via.placeholder.com/30" alt="والکس">
+                                </div>
+                                <div class="exchange-name">والکس</div>
+                            </div>
+                        </td>
+                        <td class="price-cell">1,859,450,000</td>
+                        <td class="price-cell best">
+                            <span class="price-value">1,858,870,000</span>
+                            <span class="price-tag best-tag">بهترین فروش</span>
+                        </td>
+                        <td class="diff-cell">
+                            <span class="diff-value">1.0%</span>
+                        </td>
+                        <td>
+                            <div class="volume-bar">
+                                <div class="volume-fill" style="width: 65%;"></div>
+                                <span>820 میلیون</span>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="action-btn sm">خرید</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="exchange-info">
+                                <div class="exchange-logo">
+                                    <img src="https://via.placeholder.com/30" alt="رمزینکس">
+                                </div>
+                                <div class="exchange-name">رمزینکس</div>
+                            </div>
+                        </td>
+                        <td class="price-cell">1,859,780,000</td>
+                        <td class="price-cell">1,859,100,000</td>
+                        <td class="diff-cell">
+                            <span class="diff-value">1.1%</span>
+                        </td>
+                        <td>
+                            <div class="volume-bar">
+                                <div class="volume-fill" style="width: 45%;"></div>
+                                <span>650 میلیون</span>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="action-btn sm">خرید</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="exchange-info">
+                                <div class="exchange-logo">
+                                    <img src="https://via.placeholder.com/30" alt="اکسیر">
+                                </div>
+                                <div class="exchange-name">اکسیر</div>
+                            </div>
+                        </td>
+                        <td class="price-cell">1,860,100,000</td>
+                        <td class="price-cell">1,859,450,000</td>
+                        <td class="diff-cell">
+                            <span class="diff-value">1.1%</span>
+                        </td>
+                        <td>
+                            <div class="volume-bar">
+                                <div class="volume-fill" style="width: 35%;"></div>
+                                <span>420 میلیون</span>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="action-btn sm">خرید</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="exchange-info">
+                                <div class="exchange-logo">
+                                    <img src="https://via.placeholder.com/30" alt="بیت‌پین">
+                                </div>
+                                <div class="exchange-name">بیت‌پین</div>
+                            </div>
+                        </td>
+                        <td class="price-cell">1,860,250,000</td>
+                        <td class="price-cell">1,859,570,000</td>
+                        <td class="diff-cell">
+                            <span class="diff-value">1.1%</span>
+                        </td>
+                        <td>
+                            <div class="volume-bar">
+                                <div class="volume-fill" style="width: 25%;"></div>
+                                <span>320 میلیون</span>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="action-btn sm">خرید</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="update-time">
+                <svg class="time-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                آخرین به‌روزرسانی: ۳ دقیقه پیش
+            </div>
+        </section>
+        
+        <!-- بخش فرصت‌های آربیتراژ -->
+        <section class="arbitrage-section">
+            <h2 class="section-title">فرصت‌های برتر آربیتراژ بیت‌کوین</h2>
+            
+            <div class="arbitrage-grid">
+                <!-- کارت فرصت اول -->
+                <div class="arbitrage-card">
+                    <div class="card-header">
+                        <div class="card-date">۱۸ اردیبهشت ۱۴۰۴</div>
+                        <div class="card-menu">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="12" cy="5" r="1"></circle>
+                                <circle cx="12" cy="19" r="1"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="card-content">
+                        <div class="progress-labels">
+                            <span class="risk-label">درصد ریسک</span>
+                            <span class="risk-value">۵٪</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill low" style="width: 5%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="opportunity-details">
+                            <div class="detail-item">
+                                <span class="detail-label">خرید از:</span>
+                                <span class="detail-value">نوبیتکس</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">فروش به:</span>
+                                <span class="detail-value">والکس</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">اختلاف:</span>
+                                <span class="detail-value highlight">۲.۱٪</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <div class="discovery-time">
+                            <span>۲ ساعت پیش کشف شده</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- کارت فرصت دوم -->
+                <div class="arbitrage-card">
+                    <div class="card-header">
+                        <div class="card-date">۱۸ اردیبهشت ۱۴۰۴</div>
+                        <div class="card-menu">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="12" cy="5" r="1"></circle>
+                                <circle cx="12" cy="19" r="1"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="card-content">
+                        <div class="progress-labels">
+                            <span class="risk-label">درصد ریسک</span>
+                            <span class="risk-value">۱۵٪</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill medium" style="width: 15%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="opportunity-details">
+                            <div class="detail-item">
+                                <span class="detail-label">خرید از:</span>
+                                <span class="detail-value">رمزینکس</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">فروش به:</span>
+                                <span class="detail-value">اکسیر</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">اختلاف:</span>
+                                <span class="detail-value highlight">۱.۱٪</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <div class="discovery-time">
+                            <span>۱ ساعت پیش کشف شده</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- کارت فرصت سوم -->
+                <div class="arbitrage-card">
+                    <div class="card-header">
+                        <div class="card-date">۱۸ اردیبهشت ۱۴۰۴</div>
+                        <div class="card-menu">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="12" cy="5" r="1"></circle>
+                                <circle cx="12" cy="19" r="1"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="card-content">
+                        <div class="progress-labels">
+                            <span class="risk-label">درصد ریسک</span>
+                            <span class="risk-value">۳۵٪</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill high" style="width: 35%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="opportunity-details">
+                            <div class="detail-item">
+                                <span class="detail-label">خرید از:</span>
+                                <span class="detail-value">بیت‌پین</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">فروش به:</span>
+                                <span class="detail-value">نوبیتکس</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">اختلاف:</span>
+                                <span class="detail-value highlight">۰.۹٪</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <div class="discovery-time">
+                            <span>۴۵ دقیقه پیش کشف شده</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- بخش اطلاعات ارز -->
+        <div class="coin-details">
+            <div class="details-card">
+                <h2 class="section-title">درباره بیت‌کوین</h2>
+                
+                <div class="coin-description">
+                    <p>بیت‌کوین (Bitcoin) اولین و محبوب‌ترین ارز دیجیتال جهان است که در سال ۲۰۰۹ توسط فردی با نام مستعار ساتوشی ناکاموتو ایجاد شد. این ارز دیجیتال به عنوان یک سیستم پرداخت نقطه به نقطه طراحی شده که امکان انتقال مستقیم ارزش را بدون نیاز به واسطه‌های مالی سنتی فراهم می‌کند.</p>
+                    
+                    <p>بیت‌کوین بر روی فناوری بلاکچین کار می‌کند که یک دفتر کل توزیع‌شده است و تمام تراکنش‌ها در آن ثبت می‌شوند. این ویژگی باعث می‌شود که تراکنش‌های بیت‌کوین غیرقابل تغییر و شفاف باشند. بیت‌کوین همچنین دارای عرضه محدود ۲۱ میلیون واحدی است که به آن ویژگی کمیابی می‌دهد.</p>
+                    
+                    <p>امروزه، بیت‌کوین توسط میلیون‌ها نفر در سراسر جهان برای انواع کاربردها از جمله سرمایه‌گذاری، حفظ ارزش، و انجام پرداخت‌های بین‌المللی استفاده می‌شود. با افزایش پذیرش آن توسط شرکت‌ها و حتی کشورها، بیت‌کوین به یک دارایی و شبکه پرداخت مهم در اقتصاد جهانی تبدیل شده است.</p>
+                </div>
+                
+                <div class="key-features">
+                    <h3 class="section-title">ویژگی‌های کلیدی</h3>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="8" y1="6" x2="21" y2="6"></line>
+                                <line x1="8" y1="12" x2="21" y2="12"></line>
+                                <line x1="8" y1="18" x2="21" y2="18"></line>
+                                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                            </svg>
+                        </div>
+                        <div class="feature-content">
+                            <h4 class="feature-title">کمیابی</h4>
+                            <p class="feature-desc">عرضه محدود ۲۱ میلیون واحدی که باعث می‌شود بیت‌کوین یک دارایی کمیاب باشد و از تورم جلوگیری کند.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </div>
+                        <div class="feature-content">
+                            <h4 class="feature-title">امنیت</h4>
+                            <p class="feature-desc">استفاده از رمزنگاری قوی و مکانیسم اجماع اثبات کار (PoW) برای تأمین امنیت شبکه و تراکنش‌ها.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline>
+                                <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path>
+                            </svg>
+                        </div>
+                        <div class="feature-content">
+                            <h4 class="feature-title">غیرمتمرکز</h4>
+                            <p class="feature-desc">شبکه‌ای بدون نیاز به اعتماد به شخص ثالث یا واسطه مرکزی که توسط هزاران نود و ماینر در سراسر جهان اداره می‌شود.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="price-chart">
+                    <div class="chart-placeholder">
+                        <p>نمودار قیمت در اینجا نمایش داده می‌شود.</p>
+                    </div>
+                </div>
+                
+                <div class="time-filters">
+                    <div class="time-filter active">روزانه</div>
+                    <div class="time-filter">هفتگی</div>
+                    <div class="time-filter">ماهانه</div>
+                    <div class="time-filter">سالانه</div>
+                    <div class="time-filter">تمام مدت</div>
+                </div>
+            </div>
+            
+            <div class="details-card">
+                <h2 class="section-title">مشخصات فنی</h2>
+                
+                <div class="technical-info">
+                    <div class="info-item">
+                        <div class="info-label">الگوریتم اجماع</div>
+                        <div class="info-value">اثبات کار (PoW)</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">حداکثر عرضه</div>
+                        <div class="info-value">۲۱,۰۰۰,۰۰۰ BTC</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">عرضه در گردش</div>
+                        <div class="info-value">۱۹,۴۲۵,۷۰۶ BTC</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">زمان بلوک</div>
+                        <div class="info-value">~۱۰ دقیقه</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">سال شروع</div>
+                        <div class="info-value">۲۰۰۹</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">هش ریت شبکه</div>
+                        <div class="info-value">۵۴۰.۱۲ EH/s</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">بالاترین قیمت تاریخی</div>
+                        <div class="info-value">۶۹,۰۰۰ دلار (۲۰۲۱)</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">سایت رسمی</div>
+                        <div class="info-value">bitcoin.org</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">مخزن کد</div>
+                        <div class="info-value">github.com/bitcoin</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // برای فعال‌سازی زمان‌بندی‌های نمودار
+        document.querySelectorAll('.time-filter').forEach(filter => {
+            filter.addEventListener('click', function() {
+                document.querySelectorAll('.time-filter').forEach(f => {
+                    f.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

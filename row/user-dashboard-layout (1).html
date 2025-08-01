@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل کاربری - GapTrade</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans-font@master/dist/IRANSansWeb.woff2" rel="stylesheet">
+    <style>
+        /* === استایل‌های عمومی === */
+        @font-face {
+            font-family: 'IRANSans';
+            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans-font@master/dist/IRANSansWeb.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'IRANSans', sans-serif;
+        }
+
+        body {
+            background-color: #021118;
+            color: white;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* === پترن پس‌زمینه === */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #0a121c;
+            background-image: 
+                radial-gradient(rgba(239, 131, 3, 0.05) 2px, transparent 2px),
+                radial-gradient(rgba(255, 255, 255, 0.03) 2px, transparent 2px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        /* گلوها و افکت‌های بصری */
+        .glow-effect {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .glow-top-right {
+            top: -250px;
+            right: -250px;
+            background: radial-gradient(circle, rgba(239, 131, 3, 0.5) 0%, transparent 70%);
+        }
+
+        .glow-bottom-left {
+            bottom: -250px;
+            left: -250px;
+            background: radial-gradient(circle, rgba(0, 100, 255, 0.4) 0%, transparent 70%);
+        }
+
+        /* === استایل‌های هدر === */
+        .header {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            background: rgba(26, 36, 50, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 100;
+        }
+
+        .logo {
+            height: 40px;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ef8303, #ff9419);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .user-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .notifications {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background-color: #ef8303;
+            border-radius: 50%;
+        }
+
+        /* === استایل‌های بدنه === */
+        .content-wrapper {
+            display: flex;
+            flex: 1;
+        }
+
+        /* === استایل‌های منوی کناری دسکتاپ === */
+        .sidebar {
+            width: 240px;
+            background: rgba(26, 36, 50, 0.8);
+            backdrop-filter: blur(10px);
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 20px 0;
+            transition: transform 0.3s ease;
+            z-index: 90;
+            overflow-y: auto;
+            height: calc(100vh - 70px);
+            position: fixed;
+            right: 0;
+            top: 70px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-item {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-right: 3px solid transparent;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+
+        .sidebar-link.active {
+            background: linear-gradient(to left, rgba(239, 131, 3, 0.1), transparent);
+            color: #ef8303;
+            border-right-color: #ef8303;
+        }
+
+        .sidebar-icon {
+            margin-left: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.05);
+            margin: 15px 0;
+        }
+
+        /* === استایل‌های محتوای اصلی === */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            margin-right: 240px;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* === استایل‌های منوی موبایل === */
+        .mobile-menu {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            height: 65px;
+            background: rgba(26, 36, 50, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+            display: none;
+        }
+
+        .mobile-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            padding: 8px 0;
+            font-size: 0.7rem;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-item:hover,
+        .mobile-item.active {
+            color: #ef8303;
+        }
+
+        .mobile-icon {
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+        }
+
+        .mobile-menu-button {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ef8303, #ff9419);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 3px 15px rgba(239, 131, 3, 0.3);
+            cursor: pointer;
+            z-index: 100;
+            display: none;
+        }
+
+        /* === استایل‌های منوی همبرگر === */
+        .fullscreen-menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(10, 18, 28, 0.98);
+            z-index: 110;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .fullscreen-menu.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .close-menu {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 1.5rem;
+            color: white;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .fullscreen-menu-list {
+            list-style: none;
+            text-align: center;
+        }
+
+        .fullscreen-menu-item {
+            margin-bottom: 20px;
+        }
+
+        .fullscreen-menu-link {
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .fullscreen-menu-icon {
+            margin-left: 15px;
+        }
+
+        .fullscreen-menu-link:hover,
+        .fullscreen-menu-link.active {
+            color: #ef8303;
+            transform: scale(1.05);
+        }
+
+        .user-info-mobile {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .user-avatar-mobile {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ef8303, #ff9419);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+
+        .user-name-mobile {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .user-email-mobile {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* === رسپانسیو === */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(100%);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-right: 0;
+                padding-bottom: 80px;
+            }
+            
+            .mobile-menu {
+                display: flex;
+            }
+            
+            .mobile-menu-button {
+                display: flex;
+            }
+        }
+
+        @media (min-width: 993px) {
+            .fullscreen-menu {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- پترن و افکت‌های پس‌زمینه -->
+    <div class="bg-pattern"></div>
+    <div class="glow-effect glow-top-right"></div>
+    <div class="glow-effect glow-bottom-left"></div>
+    
+    <!-- هدر -->
+    <header class="header">
+        <img src="https://via.placeholder.com/150x40/ef8303/ffffff?text=GapTrade" alt="لوگو" class="logo">
+        
+        <div class="user-menu">
+            <div class="notifications">
+                <div class="notification-dot"></div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+            </div>
+            <div class="user-avatar">م</div>
+            <div class="user-name">محمد امینی</div>
+        </div>
+    </header>
+    
+    <!-- محتوای اصلی -->
+    <div class="content-wrapper">
+        <!-- منوی کناری دسکتاپ -->
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link active">
+                        <span class="sidebar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="7" height="9"></rect>
+                                <rect x="14" y="3" width="7" height="5"></rect>
+                                <rect x="14" y="12" width="7" height="9"></rect>
+                                <rect x="3" y="16" width="7" height="5"></rect>
+                            </svg>
+                        </span>
+                        <span>داشبورد</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <span class="sidebar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                        </span>
+                        <span>فرصت‌های آربیتراژ</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <span class="sidebar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                            </svg>
+                        </span>
+                        <span>تنظیمات آربیتراژ</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <span class="sidebar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </span>
+                        <span>تاریخچه خرید</span>
+                    </a>
+                </li>
+                
+                <div class="sidebar-divider"></div>
+                
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <span class="sidebar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-16.5 7.5a2.25 2.25 0 0 0 .67 4.32l4.033 1.05a1.66 1.66 0 0 0 1.51-.44l2.577-2.577a1.125 1.125 0 0 1 1.59 0l2.598 2.598a1.664 1.664 0 0 0 1.18.49c.123 0 .246-.012.366-.035l5.106-1.014a2.25 2.25 0 0 0 1.772-2.207V4.32a2.242 2.242 0 0 0-2.28-1.888z"></path>
+                            </svg>
+                        </span>
+                        <span>اتصال به تلگرام</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <span class="sidebar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </span>
+                        <span>ویرایش پروفایل</span>
+                    </a>
+                </li>
+                
+                <div class="sidebar-divider"></div>
+                
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <span class="sidebar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                        </span>
+                        <span>خروج</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        
+        <!-- محتوای اصلی -->
+        <main class="main-content">
+            <!-- محتوای صفحه فعلی در اینجا نمایش داده می‌شود -->
+            <h1 style="text-align: center; margin-top: 20%;">محتوای داشبورد</h1>
+            <p style="text-align: center; margin-top: 20px;">این قسمت در مرحله بعدی طراحی خواهد شد.</p>
+        </main>
+    </div>
+    
+    <!-- منوی موبایل -->
+    <nav class="mobile-menu">
+        <a href="#" class="mobile-item active">
+            <span class="mobile-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="9"></rect>
+                    <rect x="14" y="3" width="7" height="5"></rect>
+                    <rect x="14" y="12" width="7" height="9"></rect>
+                    <rect x="3" y="16" width="7" height="5"></rect>
+                </svg>
+            </span>
+            <span>داشبورد</span>
+        </a>
+        <a href="#" class="mobile-item">
+            <span class="mobile-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+            </span>
+            <span>آربیتراژ</span>
+        </a>
+        <a href="#" class="mobile-item">
+            <span class="mobile-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+            </span>
+            <span>تنظیمات</span>
+        </a>
+        <a href="#" class="mobile-item">
+            <span class="mobile-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+            </span>
+            <span>تاریخچه</span>
+        </a>
+    </nav>
+    
+    <!-- دکمه منوی همبرگر -->
+    <div class="mobile-menu-button" id="open-menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </div>
+    
+    <!-- منوی تمام صفحه -->
+    <div class="fullscreen-menu" id="fullscreen-menu">
+        <button class="close-menu" id="close-menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        
+        <div class="user-info-mobile">
+            <div class="user-avatar-mobile">م</div>
+            <div class="user-name-mobile">محمد امینی</div>
+            <div class="user-email-mobile">mohammadamini@example.com</div>
+        </div>
+        
+        <ul class="fullscreen-menu-list">
+            <li class="fullscreen-menu-item">
+                <a href="#" class="fullscreen-menu-link active">
+                    <span class="fullscreen-menu-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="7" height="9"></rect>
+                            <rect x="14" y="3" width="7" height="5"></rect>
+                            <rect x="14" y="12" width="7" height="9"></rect>
+                            <rect x="3" y="16" width="7" height="5"></rect>
+                        </svg>
+                    </span>
+                    <span>داشبورد</span>
+                </a>
+            </li>
+            <li class="fullscreen-menu-item">
+                <a href="#" class="fullscreen-menu-link">
+                    <span class="fullscreen-menu-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                        </svg>
+                    </span>
+                    <span>فرصت‌های آربیتراژ</span>
+                </a>
+            </li>
+            <li class="fullscreen-menu-item">
+                <a href="#" class="fullscreen-menu-link">
+                    <span class="fullscreen-menu-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                    </span>
+                    <span>تنظیمات آربیتراژ</span>
+                </a>
+            </li>
+            <li class="fullscreen-menu-item">
+                <a href="#" class="fullscreen-menu-link">
+                    <span class="fullscreen-menu-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </span>
+                    <span>تاریخچه خرید</span>
+                </a>
+            </li>
+            <li class="fullscreen-menu-item">
+                <a href="#" class="fullscreen-menu-link">
+                    <span class="fullscreen-menu-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-16.5 7.5a2.25 2.25 0 0 0 .67 4.32l4.033 1.05a1.66 1.66 0 0 0 1.51-.44l2.577-2.577a1.125 1.125 0 0 1 1.59 0l2.598 2.598a1.664 1.664 0 0 0 1.18.49c.123 0 .246-.012.366-.035l5.106-1.014a2.25 2.25 0 0 0 1.772-2.207V4.32a2.242 2.242 0 0 0-2.28-1.888z"></path>
+                        </svg>
+                    </span>
+                    <span>اتصال به تلگرام</span>
+                </a>
+            </li>
+            <li class="fullscreen-menu-item">
+                <a href="#" class="fullscreen-menu-link">
+                    <span class="fullscreen-menu-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </span>
+                    <span>ویرایش پروفایل</span>
+                </a>
+            </li>
+            <li class="fullscreen-menu-item">
+                <a href="#" class="fullscreen-menu-link">
+                    <span class="fullscreen-menu-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                    </span>
+                    <span>خروج</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    
+    <script>
+        // دکمه‌های منو موبایل
+        const openMenuBtn = document.getElementById('open-menu');
+        const closeMenuBtn = document.getElementById('close-menu');
+        const fullscreenMenu = document.getElementById('fullscreen-menu');
+        
+        openMenuBtn.addEventListener('click', function() {
+            fullscreenMenu.classList.add('open');
+        });
+        
+        closeMenuBtn.addEventListener('click', function() {
+            fullscreenMenu.classList.remove('open');
+        });
+        
+        // بستن منو با کلیک بیرون از منو
+        fullscreenMenu.addEventListener('click', function(e) {
+            if (e.target === fullscreenMenu) {
+                fullscreenMenu.classList.remove('open');
+            }
+        });
+    </script>
+</body>
+</html>
